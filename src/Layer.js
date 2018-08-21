@@ -19,8 +19,17 @@ class Layer {
 			this._map.forEach((permArray) => {
 				for (let i = 0, n = permArray.length; i < n; i++) {
 					const perm = permArray[i];
-					const index = this._compiledPermArray.indexOf(perm);
-					if (index )
+                    const deny = perm.charAt(0) === "-";
+					const positivePerm = deny ? perm.slice(1) : perm;
+					const negativePerm = deny ? perm : null;
+					const positiveIndex = this._compiledPermArray.indexOf(positivePerm);
+                    const negativeIndex = this._compiledPermArray.indexOf(negativePerm);
+					if (positiveIndex === 0 && negativeIndex === 0) {
+						this._compiledPermArray.push(perm);
+					} else if (deny && positiveIndex !== 0) {
+					    this._compiledPermArray.splice(positiveIndex, 1);
+                        this._compiledPermArray.push(perm);
+                    } else if (!deny &&)
 				}
 			})
 		}
