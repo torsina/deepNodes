@@ -15,23 +15,42 @@ class Layer {
 		return true;
 	}
 	buildLayer() {
-		if (this._deepNodes._useIndex) {
+		if(this._deepNodes._useIndex) {
 			this._map.forEach((permArray) => {
-				for (let i = 0, n = permArray.length; i < n; i++) {
+				for(let i = 0, n = permArray.length; i < n; i++) {
 					const perm = permArray[i];
-                    const deny = perm.charAt(0) === "-";
+					const deny = perm.charAt(0) === "-";
 					const positivePerm = deny ? perm.slice(1) : perm;
 					const negativePerm = deny ? perm : null;
 					const positiveIndex = this._compiledPermArray.indexOf(positivePerm);
-                    const negativeIndex = this._compiledPermArray.indexOf(negativePerm);
-					if (positiveIndex === 0 && negativeIndex === 0) {
-						this._compiledPermArray.push(perm);
-					} else if (deny && positiveIndex !== 0) {
-					    this._compiledPermArray.splice(positiveIndex, 1);
-                        this._compiledPermArray.push(perm);
-                    } else if (!deny &&)
+					const negativeIndex = this._compiledPermArray.indexOf(negativePerm);
+					/*
+					deny + positive
+					deny + negative
+					deny + nothing
+					!deny + positive
+					!deny + negative
+					!deny + nothing
+					 */
+					switch(deny) {
+						case true: {
+							// if positive index !== 0
+							if(positiveIndex) {
+								this._compiledPermArray
+									.splice(positiveIndex, 1)
+									.push(perm);
+							} else if(negativeIndex) {
+								// nothing
+							}
+							break;
+						}
+						case false: {
+							
+							break;
+						}
+					}
 				}
-			})
+			});
 		}
 	}
 }
