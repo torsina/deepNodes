@@ -15,12 +15,13 @@ class DeepNodes {
 		}
 		return true;
 	}
-	_checkPermissionArray(array) {
-		for(let i = 0, n = array.length; i < n; i++) {
-			const perm = `${array[i]}`; // do a deep copy of the string to keep the array clean
+	_checkPermissionArray(permissions) {
+		permissions = this._handleWildCards(permissions);
+		for(let i = 0, n = permissions.length; i < n; i++) {
+			const perm = permissions[i].slice(0); // do a deep copy of the string to keep the original array clean
 			this._checkPermission(perm);
 		}
-		return true;
+		return permissions;
 	}
 	_checkPermission(perm) {
 		if(perm.charAt(0) === "-") perm = perm.slice(1); // remove the deny adjective as it's not needed here
@@ -40,6 +41,15 @@ class DeepNodes {
 		if(!Array.isArray(objectExplorer) || !objectExplorer.includes(permEndProperty)) {
 			throw new Error(`"${perm}" is not a valid permission`);
 		}
+		return true;
+	}
+	_handleWildCards(...permissions) {
+		const resultArray = [];
+		for(const permission of permissions) {
+			if(Array.isArray(permission)) return this._handleWildCards(permission);
+			else resultArray.concat(this._handler.mainHandler(permission));
+		}
+		return resultArray;
 	}
 	_createPermissionArray(objectExporer = this._schema, array = [], stringArray = []) {
 		if(Array.isArray(objectExporer)) {
@@ -63,9 +73,6 @@ class DeepNodes {
 			const permission = this._permissionArray[i];
 			this._decomposedPermissionArray.push(permission.split("."));
 		}
-	}
-	_handleWildCards(permission) {
-		return this._handler.mainHandler(permission);
 	}
 	importSchema(schema) {
 		if(this._checkSchema(schema)) {
@@ -106,7 +113,7 @@ class DeepNodes {
 		return this.getLayer(layerName).hasItem(itemID);
 	}
 	addItem(layerName, itemID, item) {
-		return this.getLayer(layerName).addItem(itemID, item);
+		return this.getLayer(layerName).setItem(itemID, item);
 	}
 	//
 	has(permission) {

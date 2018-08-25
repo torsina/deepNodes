@@ -6,8 +6,13 @@ class Layer {
 		this._compiledPermArray = [];
 		this._compiledPermMapArray = new Map();
 	}
-	addItem(id, data) {
-		const item = new Item({ id, data }, this._deepNodes);
+	setItem(id, array) {
+		// delete compiled cache
+		this._compiledPermArray = [];
+		this._compiledPermMapArray = new Map();
+		// check if array is valid
+		array = this._deepNodes._checkPermissionArray(array);
+		const item = new Item({ id, array }, this._deepNodes);
 		this._map.set(id, item);
 	}
 	getItem(id) { // eslint-disable-line consistent-return
