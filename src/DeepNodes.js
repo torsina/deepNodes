@@ -91,10 +91,15 @@ class DeepNodes {
 			throw new Error(`${layerName} layer already exists`);
 		}
 	}
-	addLayers(...layerNames) {
-		for(let i = 0, n = layerNames.length; i < n; i++) {
-			const layerName = layerNames[i];
-			this.addLayer(layerName);
+	addLayers(..._layerName) {
+		if(typeof _layerName !== "string") {
+			for(let i = 0, n = _layerName.length; i < n; i++) {
+				const layerName = _layerName[i];
+				this.addLayer(layerName);
+			}
+		} else {
+			if(this._layers.has(_layerName)) throw new Error(`"${_layerName}" already exists`);
+			this._layers.set(_layerName, new Layer(_layerName, this));
 		}
 	}
 	hasLayer(layerName) {
@@ -112,8 +117,11 @@ class DeepNodes {
 	hasItem (layerName, itemID) {
 		return this.getLayer(layerName).hasItem(itemID);
 	}
-	addItem(layerName, itemID, item) {
-		return this.getLayer(layerName).setItem(itemID, item);
+	addItem(layerName, itemID, permissionArray) {
+		return this.getLayer(layerName).setItem(itemID, permissionArray);
+	}
+	buildContext() {
+
 	}
 	//
 	has(permission) {
@@ -131,4 +139,4 @@ module.export = DeepNodes;
 
 const context = new DeepNodes();
 context.importSchema(testPermissionSchema);
-console.log(context._handleWildCards("commands.*"));
+context.addLayer("role").addItem()

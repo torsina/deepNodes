@@ -1,10 +1,11 @@
 const Item = require("Item");
 class Layer {
-	constructor(deepNodes) {
+	constructor(name, deepNodes) {
 		this._deepNodes = deepNodes;
-		this._map = new Map();
+		this._itemsMap = new Map();
 		this._compiledPermArray = [];
 		this._compiledPermMapArray = new Map();
+		this._layerName = name;
 	}
 	setItem(id, array) {
 		// delete compiled cache
@@ -12,18 +13,18 @@ class Layer {
 		this._compiledPermMapArray = new Map();
 		// check if array is valid
 		array = this._deepNodes._checkPermissionArray(array);
-		const item = new Item({ id, array }, this._deepNodes);
-		this._map.set(id, item);
+		const item = new Item({ id, array, layerName: this._layerName }, this._deepNodes);
+		this._itemsMap.set(id, item);
 	}
 	getItem(id) { // eslint-disable-line consistent-return
-		if(this.hasItem(id)) return this._map.get(id);
+		if(this.hasItem(id)) return this._itemsMap.get(id);
 	}
 	hasItem(id) {
-		if(!this._map.has(id)) throw new Error(`"${id}" layer doesn't exist`);
+		if(!this._itemsMap.has(id)) throw new Error(`"${id}" layer doesn't exist`);
 		return true;
 	}
 	buildLayer() {
-		this._map.forEach((permArray) => {
+		this._itemsMap.forEach((permArray) => {
 			for(let i = 0, n = permArray.length; i < n; i++) {
 				const perm = permArray[i];
 				const deny = perm.charAt(0) === "-";
