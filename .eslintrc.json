@@ -5,7 +5,7 @@
     "es6": true
   },
   "parserOptions": {
-    "ecmaVersion": 2017
+    "ecmaVersion": 2019
   },
   "rules": {
     "no-extra-parens": ["warn", "all", {
@@ -76,7 +76,7 @@
     "consistent-this": "error",
     "eol-last": "error",
     "func-style": ["error", "declaration", { "allowArrowFunctions": true }],
-    "id-length": ["error", { "exceptions": ["i", "j", "k", "a", "b", "t", "r", "n", "m"] }],
+    "id-length": ["error", { "exceptions": ["i", "j", "a", "b", "t", "r", "d"] }],
     "indent": ["error", "tab", { "SwitchCase": 1 }],
     "key-spacing": "error",
     "keyword-spacing": ["error", {
@@ -94,6 +94,7 @@
     "new-cap": "error",
     "no-array-constructor": "error",
     "no-lonely-if": "error",
+    "nonblock-statement-body-position": "error",
     "no-mixed-operators": "error",
     "no-multiple-empty-lines": ["error", { "max": 2, "maxEOF": 1, "maxBOF": 0 }],
     "no-new-object": "error",
@@ -103,6 +104,7 @@
     "no-whitespace-before-property": "error",
     "object-curly-newline": "error",
     "object-curly-spacing": ["error", "always"],
+    "object-property-newline": ["error", { "allowAllPropertiesOnSameLine": false }],
     "operator-assignment": "error",
     "operator-linebreak": ["error", "after"],
     "padded-blocks": ["error", "never"],
